@@ -43,6 +43,7 @@ namespace Date_Countdown
                 recentDates.Items.Insert(0, (new { Label = dateID.Text, Date = selectedDate.ToString("MM/dd/yyy") } ));
 
                 int daysToDate = (selectedDate - DateTime.Today).Days;
+                labelDisplay.Content = dateID.Text;
                 CountDownDisplay(daysToDate);
             }
             dateID.Text = "";
@@ -53,9 +54,11 @@ namespace Date_Countdown
             if (recentDates.HasItems)
             {
                 dynamic selectedItemRow = recentDates.SelectedItem;
-                DateTime selectedItem = (DateTime)DateTime.Parse(selectedItemRow.Date);
-                int daysToDate = (selectedItem - DateTime.Today).Days;
-                selectedDate = selectedItem;
+                DateTime selectedItemDate = (DateTime)DateTime.Parse(selectedItemRow.Date);
+                string selectedItemLabel = selectedItemRow.Label;
+                int daysToDate = (selectedItemDate - DateTime.Today).Days;
+                labelDisplay.Content = selectedItemLabel;
+                selectedDate = selectedItemDate;
                 CountDownDisplay(daysToDate);
             }
         }
@@ -63,23 +66,19 @@ namespace Date_Countdown
         private void CountDownDisplay(int days)
         {
             string formattedDate = selectedDate.ToString("MMMM d, yyyy");
-            dynamic itemLabel = recentDates.Items.GetItemAt(0);
             if (days >= 0)
             {
                 switch (days)
                 {
                     case 0:
-                        labelDisplay.Content = itemLabel.Label;
                         countdownText.Content = "";
                         countdownDisplay.Content = "Today";
                         break;
                     case 1:
-                        labelDisplay.Content = itemLabel.Label;
                         countdownText.Content = "to " + formattedDate;
                         countdownDisplay.Content = days + " Day";
                         break;
                     default:
-                        labelDisplay.Content = itemLabel.Label;
                         countdownText.Content = "to " + formattedDate;
                         countdownDisplay.Content = days + " Days";
                         break;
@@ -87,7 +86,6 @@ namespace Date_Countdown
             }
             else
             {
-                labelDisplay.Content = itemLabel.Label;
                 countdownText.Content = "past " + formattedDate;
                 if (days == -1)
                 {
